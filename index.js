@@ -36,9 +36,17 @@ const commands = [
 client.on('interactionCreate', async interaction => {
   if (!interaction.isCommand()) return; // only commands
 
-  if (interaction.commandName === 'say') { // only the command
-    const message = interaction.options.getString('message');
-    interaction.reply(message)
+    if (interaction.commandName === 'say') {
+    const input = interaction.options.getString('message');
+
+    // Acknowledge the interaction to avoid a timeout
+    await interaction.deferReply({ ephemeral: true });
+
+    // Send a standalone message to the channel
+    await interaction.channel.send(input);
+
+    // Optionally, delete the ephemeral deferred reply
+    await interaction.deleteReply();
   }
 });
 
