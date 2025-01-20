@@ -53,7 +53,7 @@ try {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isCommand() && !interaction.isModalSubmit()) return;
-  if (interaction.commandName === 'channel') {interaction.reply({ content: interaction.channelId, ephemeral: true });}; // handle channel command
+  if (interaction.commandName === 'channel') {interaction.reply({ content: interaction.channelId, flags: MessageFlags.Ephemeral });}; // handle channel command
   if (!process.env.IDs.includes(interaction.user.id)) { logger.warn(`Unauthorized user ${interaction.user.username} attempted to use a command.`); return; } // limit to defined users
 
   if (interaction.isCommand() && interaction.commandName === 'send') {
@@ -93,7 +93,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (isNaN(channelId)) {
         return interaction.reply({
             content: 'Channel ID must be a valid number.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
       }
 
@@ -105,7 +105,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (!channel || !channel.isTextBased()) {
       return interaction.reply({
           content: 'Invalid channel ID or the channel is not text-based.',
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
       });
       }
 
@@ -113,7 +113,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await channel.send(message);
       await interaction.reply({
           content: `Message successfully sent to <#${channelId}>.`,
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
       });
   }
 });
