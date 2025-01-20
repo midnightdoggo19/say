@@ -23,7 +23,7 @@ const logger = winston.createLogger({
   ),
   transports: [
       new winston.transports.Console(),
-      new winston.transports.File({ filename: process.env.LOG || 'starlight.log' }),
+      new winston.transports.File({ filename: process.env.LOG || process.env.LOGFILE || 'logger.log' }),
   ]
 });
 
