@@ -66,7 +66,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setCustomId('channelInput')
           .setLabel('Enter the Channel ID:')
           .setStyle(TextInputStyle.Short) // one line
-          .setRequired(true);
+          .setRequired(false);
 
       // message
       const messageInput = new TextInputBuilder()
@@ -87,7 +87,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   // modal submission
   if (interaction.isModalSubmit() && interaction.customId === 'messageModal') {
-      const channelId = interaction.fields.getTextInputValue('channelInput');
+      const channelId = interaction.fields.getTextInputValue('channelInput') ||  interaction.channelId;
       const message = interaction.fields.getTextInputValue('messageInput');
 
       if (isNaN(channelId)) {
