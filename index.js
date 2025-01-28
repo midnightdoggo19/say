@@ -1,13 +1,13 @@
 const { 
-  Client, 
-  GatewayIntentBits, 
-  REST, 
-  Routes, 
-  ModalBuilder, 
-  TextInputBuilder, 
-  TextInputStyle, 
-  ActionRowBuilder, 
-  Events 
+    Client, 
+    GatewayIntentBits, 
+    REST, 
+    Routes, 
+    ModalBuilder, 
+    TextInputBuilder, 
+    TextInputStyle, 
+    ActionRowBuilder, 
+    Events 
 } = require('discord.js');
 
 require('dotenv').config();
@@ -19,12 +19,12 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 const logger = winston.createLogger({
   level: process.env.LOGLEVEL || 'info',
   format: winston.format.combine(
-      winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-      winston.format.printf(info => `[${info.timestamp}] ${info.level.toUpperCase()}: ${info.message}`)
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf(info => `[${info.timestamp}] ${info.level.toUpperCase()}: ${info.message}`)
   ),
   transports: [
-      new winston.transports.Console(),
-      new winston.transports.File({ filename: process.env.LOG || process.env.LOGFILE || 'logger.log' }),
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: process.env.LOG || process.env.LOGFILE || 'logger.log' }),
   ]
 });
 
@@ -49,8 +49,7 @@ try {
     console.log('Slash commands registered!');
 } catch (err) {
     console.error('Error registering slash commands:', err);
-}
-})();
+}})();
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isCommand() && !interaction.isModalSubmit()) return;
@@ -60,69 +59,69 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.isCommand() && interaction.commandName === 'send') {
       logger.debug(`${interaction.username} ran the \`send\` command`)      
 
-      const modal = new ModalBuilder()
-          .setCustomId('messageModal')
-          .setTitle('Send a message to a channel');
+        const modal = new ModalBuilder()
+            .setCustomId('messageModal')
+            .setTitle('Send a message to a channel');
 
-      // channel to send to
-      const channelInput = new TextInputBuilder()
-          .setCustomId('channelInput')
-          .setLabel('Enter the Channel ID:')
-          .setStyle(TextInputStyle.Short) // one line
-          .setRequired(false);
+        // channel to send to
+        const channelInput = new TextInputBuilder()
+            .setCustomId('channelInput')
+            .setLabel('Enter the Channel ID:')
+            .setStyle(TextInputStyle.Short) // one line
+            .setRequired(false);
 
-      // message
-      const messageInput = new TextInputBuilder()
-          .setCustomId('messageInput')
-          .setLabel('Enter the Message:')
-          .setStyle(TextInputStyle.Paragraph)
-          .setRequired(true);
+        // message
+        const messageInput = new TextInputBuilder()
+            .setCustomId('messageInput')
+            .setLabel('Enter the Message:')
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(true);
 
       // add inputs to actionrows
-      const channelRow = new ActionRowBuilder().addComponents(channelInput);
-      const messageRow = new ActionRowBuilder().addComponents(messageInput);
+        const channelRow = new ActionRowBuilder().addComponents(channelInput);
+        const messageRow = new ActionRowBuilder().addComponents(messageInput);
 
-      // add rows to the modal
-      modal.addComponents(channelRow, messageRow);
+        // add rows to the modal
+        modal.addComponents(channelRow, messageRow);
 
-      await interaction.showModal(modal);
+        await interaction.showModal(modal);
   }
 
   // modal submission
   if (interaction.isModalSubmit() && interaction.customId === 'messageModal') {
-      const channelId = interaction.fields.getTextInputValue('channelInput') ||  interaction.channelId;
-      const message = interaction.fields.getTextInputValue('messageInput');
+    const channelId = interaction.fields.getTextInputValue('channelInput') || interaction.channelId;
+    const message = interaction.fields.getTextInputValue('messageInput');
 
-      if (isNaN(channelId)) {
+    if (isNaN(channelId)) {
         return interaction.reply({
             content: 'Channel ID must be a valid number.',
             flags: 64,
         });
-      }
+    }
 
-      const channel = await client.channels.fetch(channelId).catch(err => {
+    const channel = await client.channels.fetch(channelId).catch(err => {
         logger.error(`Failed to fetch channel ${channelId}: ${err.message}`);
         return null;
-      });
+    });
 
-      if (!channel || !channel.isTextBased()) {
+    if (!channel || !channel.isTextBased()) {
         logger.debug(`${interaction.username} attempted to use an invalid channel ID`)
 
         return interaction.reply({
-          content: 'Invalid channel ID or the channel is not text-based.',
-          flags: 64,
-      });
-      }
+        content: 'Invalid channel ID or the channel is not text-based.',
+        flags: 64,
+    });
+    }
 
-      // send to channel
-      await channel.send(message);
-      await interaction.reply({
-          content: `Message successfully sent to <#${channelId}>.`,
-          flags: 64,
-      });
+    // send to channel
+    await channel.send(message);
+    await interaction.reply({
+        content: `Message successfully sent to <#${channelId}>.`,
+        flags: 64,
+    });
 
-      logger.info(`${interaction.username} sent message "${message}" to ${channelId}`)
-  }
+    logger.info(`${interaction.username} sent message "${message}" to ${channelId}`)
+}
 });
 
 if (!process.env.TOKEN || !process.env.CLIENT_ID) {
