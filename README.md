@@ -14,7 +14,7 @@ npm i
 ```
 Fill your Discord application's information in `.example.env` and rename it to `.env`. The bot is now ready to run:
 ```
-node index.js
+npm start
 ```
 # Required Intents:
 * Server Members
