@@ -9,6 +9,7 @@ const {
   ActionRowBuilder, 
   Events 
 } = require('discord.js');
+
 require('dotenv').config();
 const winston = require('winston');
 
@@ -57,6 +58,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!process.env.IDs.includes(interaction.user.id)) { logger.warn(`Unauthorized user ${interaction.user.username} attempted to use a command.`); return; } // limit to defined users
 
   if (interaction.isCommand() && interaction.commandName === 'send') {
+      logger.debug(`${interaction.username} ran the \`send\` command`)      
+
       const modal = new ModalBuilder()
           .setCustomId('messageModal')
           .setTitle('Send a message to a channel');
@@ -103,7 +106,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
       });
 
       if (!channel || !channel.isTextBased()) {
-      return interaction.reply({
+        logger.debug(`${interaction.username} attempted to use an invalid channel ID`)
+
+        return interaction.reply({
           content: 'Invalid channel ID or the channel is not text-based.',
           flags: 64,
       });
@@ -115,6 +120,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
           content: `Message successfully sent to <#${channelId}>.`,
           flags: 64,
       });
+
+      logger.info(`${interaction.username} sent message "${message}" to ${channelId}`)
   }
 });
 
