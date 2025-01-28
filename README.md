@@ -16,3 +16,6 @@ Fill your Discord application's information in `.example.env` and rename it to `
 ```
 node index.js
 ```
+# Required Intents:
+* Server Members
+* Message Content
