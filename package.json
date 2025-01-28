@@ -2,7 +2,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node main.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "^14.17.3",
