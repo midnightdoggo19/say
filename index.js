@@ -77,7 +77,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(true);
 
-      // add inputs to actionrows
+        // add inputs to actionrows
         const channelRow = new ActionRowBuilder().addComponents(channelInput);
         const messageRow = new ActionRowBuilder().addComponents(messageInput);
 
