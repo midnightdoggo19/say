@@ -136,6 +136,6 @@ client.login(process.env.TOKEN).then(() => {
 });
 
 process.on('SIGINT', function() {
-    logger.info("Caught interrupt signal, shutting down!");
+    logger.info("\nCaught interrupt signal, shutting down!");
     process.exit();
 });
